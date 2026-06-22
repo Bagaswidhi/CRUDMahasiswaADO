@@ -156,6 +156,29 @@ namespace CRUDMahasiswaADO
                 }
             }
         }
+        public void ResetData()
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                if (conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                string query = @"
+                        IF OBJECT_ID('dbo.Mahasiswa_Backup') IS NOT NULL
+                        BEGIN
+                            DELETE FROM dbo.Mahasiswa;
+                            INSERT INTO dbo.Mahasiswa
+                            SELECT * FROM dbo.Mahasiswa_Backup;
+                        END";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
 
     }
 }
