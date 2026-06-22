@@ -250,6 +250,24 @@ namespace CRUDMahasiswaADO
 
             return dtProdi;
         }
+        public DataTable getDataRekap(string prodi, DateTime tanggalmasuk)
+        {
+            if (conn.State == ConnectionState.Closed)
+            {
+                conn.Open();
+            }
+
+            SqlCommand cmd = new SqlCommand("sp_Report", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@inProdi", prodi);
+            cmd.Parameters.AddWithValue("@inTglMasuk", tanggalmasuk.Year.ToString());
+
+            da = new SqlDataAdapter(cmd);
+
+            dtMahasiswa = new DataTable();
+            da.Fill(dtMahasiswa);
+            return dtMahasiswa;
+        }
 
     }
 }
