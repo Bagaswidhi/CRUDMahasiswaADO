@@ -215,6 +215,25 @@ namespace CRUDMahasiswaADO
                 }
             }
         }
+        public void InsertLog(string message)
+        {
+            if (conn.State == ConnectionState.Closed)
+            {
+                conn.Open();
+            }
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string query = @"INSERT INTO LogError
+                                 VALUES
+                                 (GETDATE(), @pesan)";
 
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@pesan", message);
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }
