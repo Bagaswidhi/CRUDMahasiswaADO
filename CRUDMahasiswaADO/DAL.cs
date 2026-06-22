@@ -198,5 +198,23 @@ namespace CRUDMahasiswaADO
                 }
             }
         }
+        public DataTable GetMhsByNIM(string nim)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand("sp_GetMahasiswaByNIM", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@pNIM", nim);
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        DataTable dtMhs = new DataTable();
+                        da.Fill(dtMhs);
+                        return dtMhs;
+                    }
+                }
+            }
+        }
+
     }
 }
