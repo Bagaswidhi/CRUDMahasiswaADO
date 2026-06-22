@@ -179,6 +179,24 @@ namespace CRUDMahasiswaADO
                 }
             }
         }
+        public void testInject(string nim)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                if (conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
 
+                string query =
+                    "UPDATE Mahasiswa SET Nama = 'HACKED' WHERE NIM = " + nim;
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Update berhasil");
+                }
+            }
+        }
     }
 }
