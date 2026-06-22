@@ -18,6 +18,11 @@ namespace CRUDMahasiswaADO
         DataTable dtProdi;
         SqlDataAdapter da;
 
+        public static string GetConnectionString()
+        {
+            string connectionstring = $"Data Source={GetLocalIPAddress()};Initial Catalog=DBAkademikADO;User ID =sa; Password=bagas3005;";
+            return connectionString;
+        }
         
     }
 }
