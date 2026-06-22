@@ -58,6 +58,52 @@ namespace CRUDMahasiswaADO
                 }
             }
         }
+        public void InsertMhs(string nim, string nama, string alamat, string jeniskelamin, DateTime tanggallahir, string kodeProdi, byte[] FOTO)
+        {
+            if (conn.State == ConnectionState.Closed)
+            {
+                conn.Open();
+            }
+
+            SqlTransaction trans = conn.BeginTransaction();
+            try
+            {
+                SqlCommand cmd = new SqlCommand("sp_InsertMahasiswa", conn, trans);
+
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@pNIM", nim);
+                cmd.Parameters.AddWithValue("@pNama", nama);
+                cmd.Parameters.AddWithValue("@pJenisKelamin", jeniskelamin);
+                cmd.Parameters.AddWithValue("@pTanggalLahir", tanggallahir);
+                cmd.Parameters.AddWithValue("@pAlamat", alamat);
+                cmd.Parameters.AddWithValue("@pKodeProdi", kodeProdi);
+                cmd.Parameters.AddWithValue("@pTanggalDaftar", DateTime.Now);
+                cmd.Parameters.AddWithValue("@pFoto", FOTO);
+
+
+                cmd.ExecuteNonQuery();
+
+                SqlCommand cmdLog = new SqlCommand(@"INSERT INTO LogAktivitas
+                                                        (aktivitas, waktu)
+                                                        VALUES
+                                                        (@aktivitas, GETDATE())",
+                                                    conn,
+                                                    trans);
+                cmdLog.Parameters.AddWithValue("@aktivitas", "INSERT MAHASISWA : " + nim);
+                cmdLog.ExecuteNonQuery();
+                trans.Commit();
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Database Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                trans.Rollback();
+                throw;
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
 
     }
 }
