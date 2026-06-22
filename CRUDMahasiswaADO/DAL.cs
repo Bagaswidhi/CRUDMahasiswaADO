@@ -41,6 +41,23 @@ namespace CRUDMahasiswaADO
                 }
             }
         }
+        public DataTable GetMhs()
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand("sp_GetMahasiswa", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                    {
+                        dtMahasiswa = new DataTable();
+                        da.Fill(dtMahasiswa);
+                        return dtMahasiswa;
+                    }
+                }
+            }
+        }
 
     }
 }
